@@ -1,0 +1,77 @@
+body{
+  background-color: rgb(28, 26, 28);
+}
+.linea{
+  margin: auto;
+  border-radius: 20px;
+  width: 800px;
+  height: 100px;
+  background-color: rgb(244, 77, 77);
+}
+
+.blanca{
+  border-radius: 20px;
+  float: left;
+  width: 12.5%;
+  height: 100%;
+  background-color: rgb(244, 77, 77);
+
+}
+.negra{
+  border-radius: 20px;
+  float: left;
+  width: 12.5%;
+  height: 100%;
+  background-color: rgb(103, 95, 53);
+}
+.negra-hover{
+  border-radius: 20px;
+  float: left;
+  width: 12.5%;
+  height: 100%;
+  background-color: rgb(236, 229, 61);
+}
+
+.ficha_blanca{
+  margin: 5%;
+  background-color: rgb(165, 167, 165);
+  width: 90%;
+  height: 90%;
+  border-radius: 200px;
+}
+
+.ficha_negra{
+  margin: 5%;
+  background-color:rgb(20, 20, 20);
+  width: 90%;
+  height: 90%;
+  border-radius: 200px;
+}
+/*
+.centro_blanca{
+  background-color:black;
+  width: 60%;
+  height: 60%;
+  border-radius: 200px;
+}
+.centro_negra{
+  background-color: white;
+  width: 60%;
+  height: 60%;
+  border-radius: 200px;
+}
+
+*/
+@media screen and (min-width: 1600px) and ( min-height: 1600px ){
+  .linea{
+      width: 1600px;
+      height: 200px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+  .linea{
+      width: 400px;
+      height: 50px;
+    }
+}

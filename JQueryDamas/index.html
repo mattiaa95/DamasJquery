@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Damas Jquerry</title>
+    <link id="estilo" rel="stylesheet" href="css/estilo1.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="jquery/jquery-ui.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var contador = 1; //contador para el id de la celda
+            var color = ""; //inicializo la variable color de la casilla
+            var colores = ["negra", "blanca"]; //clases de las casillas
+            var colornum = 1; //color num es para saber que color ponerle a la casilla he ir alternando
+            var letras = ["A", "B", "C", "D", "E", "F", "G", "L"]; //letras de las lineas es su id
+            var celda = ""; //inicializo la variable de celda serain div nuevo en cada vuelta
+            var linea = ""; //iniziaclizo la variable linea donde iran los div de las celdas una vez completados
+            var ficha = ""; //inicializamos el div ficha
+            var coloresfichas = ["ficha_blanca", "ficha_negra", "centro_blanca", "centro_negra"] //colores fichas referencia alas clases
+            var fichasblancas = 1; //ids y numero de fichas
+            var fichasnegras = 1; //ids y numeor de fichas
+            var movimiento = true;
+            //primer for para las lineas 8 en este caso
+            //empezamos
+
+            function generar_tablero() {
+
+
+                for (var e = 0; e < 8; e++) {
+                    //creamos el div linea consi id letra y su clase
+                    linea = $("<div>", {
+                        "id": letras[e],
+                        "class": "linea"
+                    });
+
+                    //for para los div de las casillas que se añaden a la linea
+                    for (var i = 0; i < 8; i++) {
+                        //condicional para saber que color asignar en base a si colornum es par o no
+                        if (colornum % 2 == 0) {
+                            color = colores[0];
+                        } else {
+                            color = colores[1];
+                        }
+
+                        //creamos la celda le asigramos el id del contador (total 64 celdas  8*8),y el color que colocamos antes
+                        celda = $("<div>", {
+                            "id": letras[e] + contador,
+                            "class": color
+                        });
+
+
+                        //condicional para saber si insertar o no la ficha.en base letra[e] y color de casilla
+                        if ((letras[e] == "A" || letras[e] == "B" || letras[e] == "C") && (color == "negra")) {
+                            ficha = $("<div>", {
+                                "id": "BLANCA" + fichasblancas,
+                                "class": coloresfichas[0]
+                            });
+                            centro = $("<div>", {
+                                "class": coloresfichas[2]
+                            });
+                            fichasblancas++;
+                            ficha.append(centro);
+                            celda.append(ficha);
+                        };
+                        //condicional para saber si insertar o no la ficha.en base letra[e] y color de casilla
+                        if ((letras[e] == "F" || letras[e] == "G" || letras[e] == "L") && (color == "negra")) {
+                            ficha = $("<div>", {
+                                "id": "NEGRA" + fichasnegras,
+                                "class": coloresfichas[1]
+                            });
+                            centro = $("<div>", {
+                                "class": coloresfichas[3]
+                            });
+                            fichasnegras++;
+                            ficha.append(centro);
+                            celda.append(ficha);
+                        };
+
+                        //añadimos la celda a la linea
+                        linea.append(celda);
+                        //sumamos contador para id
+                        contador++;
+                        //sumamos contador para color de celda.
+                        colornum++;
+                    }
+                    //importantisimo para alternar el color de la otra fila hay que sumar uno a colornum al salir del for.
+                    colornum++;
+                    contador = 1;
+                    //añadimos la linea al tablero.
+                    $("#tablero").append(linea);
+                }
+            }
+
+
+            //----------------------------------------------------------------------------------------
+
+
+            function moverBalncas(ficha) {
+
+                var id_casilla_ficha = ficha.parent().attr('id');
+                var casilla = "";
+                var posicionletra = id_casilla_ficha.charAt(0);
+                var posicionnumero = id_casilla_ficha.charAt(1);
+                console.log(id_casilla_ficha.charAt(0));
+                console.log(id_casilla_ficha.charAt(1));
+                console.log(id_casilla_ficha);
+
+                //movimiento de una linea a otra
+                for (var i = 0; i < (letras.length - 1); i++) {
+                    if (letras[i] == posicionletra) {
+                        casilla += "#" + letras[(i + 1)];
+                    }
+                }
+                if (posicionnumero > 1 && posicionnumero < 8) {
+                    posicionnumero--;
+                    casilla += posicionnumero;
+                    casilla += "," + casilla;
+                    casilla = casilla.slice(0, -1);
+                    posicionnumero += 2;
+                    casilla += posicionnumero;
+                    console.log(casilla);
+                } else if (posicionnumero > 1) {
+                    posicionnumero--;
+                    casilla += posicionnumero;
+                } else if (posicionnumero < 8) {
+                    posicionnumero++;
+                    casilla += posicionnumero;
+                }
+
+                console.log(casilla);
+
+                $(function() {
+                    $(ficha).draggable({
+                        revert: "invalid"
+                    });
+                    if (movimiento) {
+                        $(casilla).droppable({
+                            classes: {
+                                "ui-droppable-hover": "negra-hover"
+                            },
+                            drop: function(event, ui) {
+                                var x = ui.helper.clone();
+                                x.removeClass().attr('style', '');
+                                x.addClass(coloresfichas[0]);
+                                x.appendTo(this);
+                                ui.helper.remove();
+                            }
+                        });
+                    }
+                });
+            }
+
+
+
+
+
+            generar_tablero()
+            moverBalncas($("#BLANCA9"));
+
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="tablero">
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    /*
+
+                $(function() {
+                    var ficha1 = $("#BLANCA12"),
+                        casillas1 = $("#D7");
+
+                    $(ficha1).draggable({
+                        revert: "invalid"
+                    });
+
+                    if (movimiento) {
+                      var id=ficha1.parent().attr('id');
+                      console.log(id.charAt(0));
+                      console.log(id.charAt(1));
+                      console.log(id);
+                        $(casillas1).droppable({
+                            classes: {
+                                "ui-droppable-hover": "negra-hover"
+                            },
+                            drop: function(event, ui) {
+                                var x = ui.helper.clone();
+                                x.removeClass().attr('style', '');
+                                x.addClass(coloresfichas[0]);
+                                x.appendTo(casillas1);
+                                ui.helper.remove();
+                            }
+                        });
+                    }
+                });
+
+                */
+</script>
