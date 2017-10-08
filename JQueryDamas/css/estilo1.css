@@ -6,7 +6,7 @@ body{
   border-radius: 20px;
   width: 800px;
   height: 100px;
-  background-color: rgb(244, 77, 77);
+
 }
 
 .blanca{
@@ -14,7 +14,7 @@ body{
   float: left;
   width: 12.5%;
   height: 100%;
-  background-color: rgb(244, 77, 77);
+  background-color: rgb(89,73,47);
 
 }
 .negra{
@@ -22,7 +22,7 @@ body{
   float: left;
   width: 12.5%;
   height: 100%;
-  background-color: rgb(103, 95, 53);
+  background-color: rgb(244,166,102);
 }
 .negra-hover{
   border-radius: 20px;
@@ -34,7 +34,7 @@ body{
 
 .ficha_blanca{
   margin: 5%;
-  background-color: rgb(165, 167, 165);
+  background-color: rgb(191,57,54);
   width: 90%;
   height: 90%;
   border-radius: 200px;
@@ -42,7 +42,7 @@ body{
 
 .ficha_negra{
   margin: 5%;
-  background-color:rgb(20, 20, 20);
+  background-color:rgb(94,143,157);
   width: 90%;
   height: 90%;
   border-radius: 200px;
