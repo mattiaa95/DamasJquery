@@ -2,192 +2,208 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Damas Jquerry</title>
-    <link id="estilo" rel="stylesheet" href="css/estilo1.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script src="jquery/jquery-ui.min.js" charset="utf-8"></script>
-    <script type="text/javascript">
-        var contador = 1; //contador para el id de la celda
-        var color = ""; //inicializo la variable color de la casilla
-        var colores = ["negra", "blanca"]; //clases de las casillas
-        var colornum = 1; //color num es para saber que color ponerle a la casilla he ir alternando
-        var letras = ["A", "B", "C", "D", "E", "F", "G", "L"]; //letras de las lineas es su id
-        var celda = ""; //inicializo la variable de celda serain div nuevo en cada vuelta
-        var linea = ""; //iniziaclizo la variable linea donde iran los div de las celdas una vez completados
-        var ficha = ""; //inicializamos el div ficha
-        var coloresfichas = ["ficha_blanca", "ficha_negra", "centro_blanca", "centro_negra"] //colores fichas referencia alas clases
-        var fichasblancas = 1; //ids y numero de fichas
-        var fichasnegras = 1; //ids y numeor de fichas
-        var turno = 0;
-        //primer for para las lineas 8 en este caso
-        //empezamos
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Damas Jquerry</title>
+  <link id="estilo" rel="stylesheet" href="css/estilo1.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="jquery/jquery-ui.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    var contador = 1; //contador para el id de la celda
+    var color = ""; //inicializo la variable color de la casilla
+    var colores = ["negra", "blanca"]; //clases de las casillas
+    var colornum = 1; //color num es para saber que color ponerle a la casilla he ir alternando
+    var letras = ["A", "B", "C", "D", "E", "F", "G", "L"]; //letras de las lineas es su id
+    var celda = ""; //inicializo la variable de celda serain div nuevo en cada vuelta
+    var linea = ""; //iniziaclizo la variable linea donde iran los div de las celdas una vez completados
+    var ficha = ""; //inicializamos el div ficha
+    var coloresfichas = ["ficha_blanca", "ficha_negra", "centro_blanca", "centro_negra"] //colores fichas referencia alas clases
+    var fichasblancas = 1; //ids y numero de fichas
+    var fichasnegras = 1; //ids y numeor de fichas
+    var turno = 0;
+    //primer for para las lineas 8 en este caso
+    //empezamos
 
-        function generar_tablero() {
-
-
-            for (var e = 0; e < 8; e++) {
-                //creamos el div linea consi id letra y su clase
-                linea = $("<div>", {
-                    "id": letras[e],
-                    "class": "linea"
-                });
-
-                //for para los div de las casillas que se añaden a la linea
-                for (var i = 0; i < 8; i++) {
-                    //condicional para saber que color asignar en base a si colornum es par o no
-                    if (colornum % 2 == 0) {
-                        color = colores[0];
-                    } else {
-                        color = colores[1];
-                    }
-
-                    //creamos la celda le asigramos el id del contador (total 64 celdas  8*8),y el color que colocamos antes
-                    celda = $("<div>", {
-                        "id": letras[e] + contador,
-                        "class": color
-                    });
+    function generar_tablero() {
 
 
-                    //condicional para saber si insertar o no la ficha.en base letra[e] y color de casilla
-                    if ((letras[e] == "A" || letras[e] == "B" || letras[e] == "C") && (color == "negra")) {
-                        ficha = $("<div>", {
-                            "id": "BLANCA" + fichasblancas,
-                            "class": coloresfichas[0]
-                        });
-                        centro = $("<div>", {
-                            "class": coloresfichas[2]
-                        });
-                        fichasblancas++;
-                        ficha.append(centro);
-                        celda.append(ficha);
-                    };
-                    //condicional para saber si insertar o no la ficha.en base letra[e] y color de casilla
-                    if ((letras[e] == "F" || letras[e] == "G" || letras[e] == "L") && (color == "negra")) {
-                        ficha = $("<div>", {
-                            "id": "NEGRA" + fichasnegras,
-                            "class": coloresfichas[1]
-                        });
-                        centro = $("<div>", {
-                            "class": coloresfichas[3]
-                        });
-                        fichasnegras++;
-                        ficha.append(centro);
-                        celda.append(ficha);
-                    };
-
-                    //añadimos la celda a la linea
-                    linea.append(celda);
-                    //sumamos contador para id
-                    contador++;
-                    //sumamos contador para color de celda.
-                    colornum++;
-                }
-                //importantisimo para alternar el color de la otra fila hay que sumar uno a colornum al salir del for.
-                colornum++;
-                contador = 1;
-                //añadimos la linea al tablero.
-                $("#tablero").append(linea);
-            }
-        }
-
-
-        //----------------------------------------------------------------------------------------
-
-
-        function mover(ficha, selectormovimiento) { //selecciona cual se va a mover) { //para saber si se puede mover o no la ficha, deja arastrarla
-            //id de la casilla de la ficha que le pasamos por parametro
-            var id_casilla_ficha = ficha.parent().attr('id');
-            //inicializamos la casilla que sera donde s emovera la ficha
-            var casilla = "";
-            //letra donde se encuantra la casilla de la ficha
-            var posicionletra = id_casilla_ficha.charAt(0);
-            //numero donde se encuantra la casilla de la ficha
-            var posicionnumero = id_casilla_ficha.charAt(1);
-            //Selector movimiento blanca o negra
-
-            if (ficha.attr('id').charAt(0) == "B") {
-                selectormovimiento = 1;
-            }
-            //solo analiza la primera letra del id , en este caso N de negra
-            if (ficha.attr('id').charAt(0) == "N") {
-                selectormovimiento = -1;
-            }
-
-            //movimiento de una linea a otra
-            for (var i = 0; i < (letras.length - 1); i++) {
-                if (letras[i] == posicionletra) {
-                    //sabiendo la posicionletra sabe que suma una
-                    casilla += "#" + letras[(i + selectormovimiento)]; //selector de movimiento si es negra o es blanca
-                }
-            }
-
-            // analisis de la posicion , ya que no puede exceder de 8 o ser inferor a 0;
-            if (posicionnumero > 1 && posicionnumero < 8) {
-                posicionnumero--;
-                casilla += posicionnumero;
-                casilla += "," + casilla;
-                casilla = casilla.slice(0, -1);
-                posicionnumero += 2;
-                casilla += posicionnumero;
-            } else if (posicionnumero > 1) {
-                posicionnumero--;
-                casilla += posicionnumero;
-            } else if (posicionnumero < 8) {
-                posicionnumero++;
-                casilla += posicionnumero;
-            }
-
-
-            $(function() {
-                $(ficha).draggable({
-                    revert: "invalid"
-                });
-
-                $(casilla).droppable({
-                    classes: {
-                        "ui-droppable-hover": "negra-hover"
-                    },
-                    drop: function(event, ui) {
-                        var x = ui.helper.clone();
-                        x.attr('style', '');
-                        x.appendTo(this);
-                        ui.helper.remove();
-                    },
-                    accept: function() {
-                        if (!$(this).html()) {
-                            return true;
-                        }
-                    }
-
-                });
-
-            });
-        }
-
-
-
-        $(document).ready(function() {
-
-            generar_tablero()
-
-            mover($("#BLANCA12"));
-            mover($("#BLANCA11"));
-            mover($("#NEGRA1"));
-            mover($("#NEGRA2"));
-
-
-
-
+      for (var e = 0; e < 8; e++) {
+        //creamos el div linea consi id letra y su clase
+        linea = $("<div>", {
+          "id": letras[e],
+          "class": "linea"
         });
-    </script>
-</head>
 
+        //for para los div de las casillas que se añaden a la linea
+        for (var i = 0; i < 8; i++) {
+          //condicional para saber que color asignar en base a si colornum es par o no
+          if (colornum % 2 == 0) {
+            color = colores[0];
+          } else {
+            color = colores[1];
+          }
+
+          //creamos la celda le asigramos el id del contador (total 64 celdas  8*8),y el color que colocamos antes
+          celda = $("<div>", {
+            "id": letras[e] + contador,
+            "class": color,
+          });
+
+
+          //condicional para saber si insertar o no la ficha.en base letra[e] y color de casilla
+          if ((letras[e] == "A" || letras[e] == "B" || letras[e] == "C") && (color == "negra")) {
+            ficha = $("<div>", {
+              "id": "BLANCA" + fichasblancas,
+              "class": coloresfichas[0],
+              "onmouseover": "mover($('#BLANCA" + fichasblancas + "'))"
+            });
+            centro = $("<div>", {
+              "class": coloresfichas[2]
+            });
+            fichasblancas++;
+            ficha.append(centro);
+            celda.append(ficha);
+          };
+          //condicional para saber si insertar o no la ficha.en base letra[e] y color de casilla
+          if ((letras[e] == "F" || letras[e] == "G" || letras[e] == "L") && (color == "negra")) {
+            ficha = $("<div>", {
+              "id": "NEGRA" + fichasnegras,
+              "class": coloresfichas[1],
+              "onmouseover": "mover($('#NEGRA" + fichasnegras + "'))"
+            });
+            centro = $("<div>", {
+              "class": coloresfichas[3]
+            });
+            fichasnegras++;
+            ficha.append(centro);
+            celda.append(ficha);
+          };
+
+          //añadimos la celda a la linea
+          linea.append(celda);
+          //sumamos contador para id
+          contador++;
+          //sumamos contador para color de celda.
+          colornum++;
+        }
+        //importantisimo para alternar el color de la otra fila hay que sumar uno a colornum al salir del for.
+        colornum++;
+        contador = 1;
+        //añadimos la linea al tablero.
+        $("#tablero").append(linea);
+      }
+    }
+
+
+    //----------------------------------------------------------------------------------------
+
+
+    function mover(fichaP) {
+      var id = fichaP.parent().attr('id');
+      var id_correcto_1 = "";
+      var id_correcto_2 = "";
+      var id_numero = parseInt(id.charAt(1));
+      var id_letra= "";
+      var selectormovimiento = 0;
+      var comer=0;
+
+      if (fichaP.attr('id').charAt(0) == "B") {
+        selectormovimiento = 1;
+      }
+      //solo analiza la primera letra del id, en este caso N de negra
+      if (fichaP.attr('id').charAt(0) == "N") {
+        selectormovimiento = -1;
+      }
+
+      for (var i = 0; i < (letras.length - 1); i++) {
+        if (letras[i] == id.charAt(0)) {
+          //sabiendo la posicionletra sabe que suma una
+          id_letra = letras[(i + selectormovimiento)]; //selector de movimiento si es negra o es blanca
+        }
+      }
+
+
+      if (id_numero > 1 && id_numero < 8) {
+          id_numero--;
+          id_correcto_1 = id_letra+id_numero;
+          id_numero += 2;
+          id_correcto_2 = id_letra+id_numero;
+
+      } else if (id_numero > 1) {
+          id_numero--;
+          id_correcto_1 = id_letra+id_numero;
+      } else if (id_numero < 8) {
+          id_numero++;
+          id_correcto_1 = id_letra+id_numero;
+      }
+
+      //solo se mueven en las negras.
+      $(fichaP).draggable({
+        revert: "invalid"
+      });
+
+      $(".negra").droppable({
+        classes: {
+          "ui-droppable-hover": "negra-hover"
+        },
+        drop: function(event, ui) {
+          //clonamos el objeto draggable
+          var efecto = ui.helper.clone();
+          //le quitamos el stylo que nos coloca la posicion
+          efecto.attr('style', '');
+          //lo añadimos a la casilla correspondiente
+          efecto.appendTo(this);
+          //eliminamos el original del clon
+          ui.helper.remove();
+          if (comer != 0) {
+            //borramos el contenido de la casilla comida.
+          };
+
+        },
+
+        accept: function() {
+
+          if ($(this).html()) {
+            return false;
+          }else if (($(this).attr('id') == id_correcto_1) || ($(this).attr('id') == id_correcto_2)) {
+            return true;
+            //si donde se puede mover hay un enemigo y el siguiente id correcto esta vacio accept con comida.
+          } else if($(id_correcto_1).children().attr('id') == fichaP.attr('id')){
+            return true;
+          }else {
+            return false;
+          }
+
+
+
+
+
+        }
+
+      });
+
+
+
+    }
+
+
+
+    $(document).ready(function() {
+
+      generar_tablero();
+
+
+
+    });
+
+
+    //By Mattiaa95 With love
+  </script>
+</head>
 <body>
-    <div id="tablero">
-    </div>
+  <div id="tablero">
+  </div>
 </body>
 
 </html>
